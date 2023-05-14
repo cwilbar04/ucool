@@ -3,9 +3,6 @@ import csv
 from io import StringIO
 import pickle
 import sys
-print(dir(sys))
-sys.path.append()  # Add the folder path to the Python module search path
-print(sys.path)
 
 from model_generator.preprocess import process_csv
 
@@ -16,7 +13,7 @@ app = Flask(__name__)
 
 # Load the trained model
 model = None
-with open('./model/random_forest.pkl', 'rb') as file:
+with open('./src/model/random_forest.pkl', 'rb') as file:
     model = pickle.load(file)
 
 @app.route('/', methods=['GET', 'POST'])
