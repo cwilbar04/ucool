@@ -8,7 +8,7 @@ def create_features(df):
 
     Returns dataframe obejct with features included.
 
-    IMPORTANT: Make sure to add feature to the data.target in params.yml if desired to be used in the model.
+    IMPORTANT: Make sure to add feature to the model.features in params.yml if desired to be used in the model.
     '''
      # Calculate the length of the first name and add a column
     df['Length of First Name'] = df['First Name'].apply(lambda x: len(x))
@@ -23,6 +23,8 @@ def create_target(df, coolness_factor):
     Inputs dataframe with 'Coolness' column.
 
     Returns dataframe with specified target to model.
+
+    IMPORTANT: Make sure to add target to the model.target in params.yml if desired to be used in the model.
     '''
     df['is_Cool'] = df['Coolness'].apply(lambda x: 1 if x > coolness_factor else 0)
     return df
@@ -56,7 +58,7 @@ def save_train_test_split(df, test_size, random_state, output_path):
     train.to_csv(train_data_path, sep=",", index=False, encoding="utf-8")
     test.to_csv(test_data_path, sep=",", index=False, encoding="utf-8")
 
-    # Save formatted_datetime back to params 
+    return train_data_path, test_data_path
 
 if __name__ == '__main__':
     import argparse
