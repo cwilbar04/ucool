@@ -13,3 +13,6 @@ model:
   target: ['is_Cool']
   train_data_path: ./data/train_2023-05-14T14:10:52.csv
   test_data_path: ./data/test_2023-05-14T14:10:52.csv
+  max_depth: 10
+  n_estimators: 30
+  avg_method: weighted
