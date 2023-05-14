@@ -4,8 +4,12 @@ data_generator:
 
 data:
   coolness_factor: 75
-  features: ['Length of First Name', 'Distance']
   test_size: 0.2
   random_state: 42
   output_path: ./data
 
+model:
+  features: ['Length of First Name', 'Distance']
+  target: ['is_Cool']
+  train_data_path: ./data/train_2023-05-14T14:10:52.csv
+  test_data_path: ./data/test_2023-05-14T14:10:52.csv
