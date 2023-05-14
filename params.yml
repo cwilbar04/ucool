@@ -3,16 +3,22 @@ data_generator:
   output_filepath: ./data_generator/demo.csv
 
 data:
-  coolness_factor: 75
+  coolness_factor: 50
   test_size: 0.2
   random_state: 42
   output_path: ./data
 
 model:
   features: ['Length of First Name', 'Distance']
-  target: ['is_Cool']
-  train_data_path: ./data/train_2023-05-14T14:10:52.csv
-  test_data_path: ./data/test_2023-05-14T14:10:52.csv
-  max_depth: 10
-  n_estimators: 30
+  target: 'is_Cool'
+  train_data_path: ./data/train_2023-05-14T16:08:37.csv
+  test_data_path: ./data/test_2023-05-14T16:08:37.csv
+  max_depth:
+  n_estimators: 100
   avg_method: weighted
+  mlflow_config:
+    artifacts_dir: artifacts
+    experiment_name: is_you_cool_classifier
+    run_name: random_forest
+    registered_model_name: is_you_cool_random_forest_model
+    remote_server_uri: http://localhost:1234

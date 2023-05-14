@@ -1,13 +1,8 @@
-import argparse
 import pandas as pd
-import pickle
 import mlflow
 import mlflow.sklearn
-from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import f1_score,recall_score,accuracy_score,precision_score,confusion_matrix,classification_report
-
-from data.preprocess import process_csv
 
 def get_feat_and_target(df,features,target):
     """
@@ -19,21 +14,25 @@ def get_feat_and_target(df,features,target):
     y=df[[target]]
     return X,y
 
-def train_model(model_config):
-
+def load_and_prepare_data_for_model(model_config):
     # Load train and test data from config
     train = pd.read_csv(model_config['train_data_path'], sep=",")
     test = pd.read_csv(model_config['test_data_path'], sep=",")
 
     # Split in to feature and target dataframes based on config
-    train_x,train_y=get_feat_and_target(train, model_config['features'], model_config['target'])
-    test_x,test_y=get_feat_and_target(test, model_config['features'], model_config['target'])
+    train_x, train_y = get_feat_and_target(train, model_config['features'], model_config['target'])
+    test_x, test_y = get_feat_and_target(test, model_config['features'], model_config['target'])
+
+    return train_x,train_y,test_x,test_y
+
+
+def train_model(model_config,train_x,train_y):
 
     # Build and train the machine learning model
     model = RandomForestClassifier(max_depth=model_config['max_depth'],n_estimators=model_config['n_estimators'])
-    model.fit(train_x, test_y)
+    model.fit(train_x, train_y.values.ravel())
 
-    return model, test_x, test_y
+    return model
 
 def evaluate_model(y_test,predictions,avg_method):
     accuracy = accuracy_score(y_test, predictions)
@@ -57,30 +56,44 @@ def evaluate_model(y_test,predictions,avg_method):
 
     return accuracy,precision,recall,f1score
 
-def main(config,input_csv_path, mlflow_tracking_uri, output_model_path):
+def main(config):
     # Establish model config dictionary
-    model_config = config['model_config']
+    model_config = config['model']
+    mlflow_config = model_config['mlflow_config']
 
     # Set the MLflow tracking URI
-    mlflow.set_tracking_uri(mlflow_tracking_uri)
+    mlflow.set_tracking_uri(mlflow_config['remote_server_uri'])
 
     # Start the MLflow experiment
-    mlflow.set_experiment("Coolness Prediction")
+    mlflow.set_experiment(mlflow_config['experiment_name'])
 
     with mlflow.start_run():
         # Track the parameters
         mlflow.log_param("model_config", model_config)
+        mlflow.log_param("max_depth", model_config["max_depth"])
+        mlflow.log_param("n_estimators", model_config["n_estimators"])
+
+
+        # Prepare data from model
+        train_x,train_y,test_x,test_y = load_and_prepare_data_for_model(model_config)
 
         # Train the model
-        model, X_test, y_test = train_model(model_config)
+        model = train_model(model_config, train_x,train_y)
 
         # Track the model artifacts
         mlflow.sklearn.log_model(model, "coolness_model")
 
         # Evaluate the model
-        test_predictions = model.predict(X_test)
-        evaluate_model(y_test,test_predictions,model_config['avg_method'])
-        mlflow.log_metric("test_rmse", metrics.mean_squared_error(y_test, test_predictions)
+        test_predictions = model.predict(test_x)
+        accuracy,precision,recall,f1score = evaluate_model(
+            test_y,test_predictions,model_config['avg_method'])
+
+        mlflow.log_metric("accuracy", accuracy)
+        mlflow.log_metric("precision", precision)
+        mlflow.log_metric("recall", recall)
+        mlflow.log_metric("f1_score", f1score)
+
+    return train_x,train_y,test_x,test_y, model
 
 if __name__ == '__main__':
     import argparse
@@ -90,6 +103,4 @@ if __name__ == '__main__':
     args.add_argument("--config", default="params.yml")
     parsed_args = args.parse_args()
 
-    config = read_params(parsed_args.config)
-
-    main(config)
+    main(read_params(parsed_args.config))
