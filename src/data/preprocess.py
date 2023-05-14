@@ -1,47 +1,80 @@
-import pandas as pd
 from datetime import datetime
+import pandas as pd
 from sklearn.model_selection import train_test_split
 
-def create_features(df):
+def create_features(source_df):
     '''
     Function to create features based on input dataframe with columns 'First Name' & 'Last Name Initial'
 
-    Returns dataframe obejct with features included.
+    Args:
+        source_df (DataFrame): Input DataFrame with columns 'First Name' and 'Last Name Initial'.
+
+    Returns:
+        DataFrame: DataFrame object with features included.
 
     IMPORTANT: Make sure to add feature to the model.features in params.yml if desired to be used in the model.
     '''
-     # Calculate the length of the first name and add a column
-    df['Length of First Name'] = df['First Name'].apply(lambda x: len(x))
+    # Calculate the length of the first name and add a column
+    source_df['Length of First Name'] = source_df['First Name'].apply(lambda x: len(x))
 
     # Calculate the distance between the first letters of the first and second columns and add a column
-    df['Distance'] = df.apply(lambda row: abs(ord(row['First Name'][0]) - ord(row['Last Name Initial'])), axis=1)
+    source_df['Distance'] = source_df.apply(lambda row: abs(ord(row['First Name'][0]) - ord(row['Last Name Initial'])), axis=1)
 
-    return df
+    return source_df
 
-def create_target(df, coolness_factor):
+def create_target(features_df, coolness_factor):
     '''
-    Inputs dataframe with 'Coolness' column.
+    Create target variable based on 'Coolness' column.
 
-    Returns dataframe with specified target to model.
+    Args:
+        features_df (DataFrame): DataFrame with the 'Coolness' column.
+        coolness_factor (float): Threshold value to determine if a value is considered 'Cool'.
+
+    Returns:
+        DataFrame: DataFrame with the specified target variable.
 
     IMPORTANT: Make sure to add target to the model.target in params.yml if desired to be used in the model.
     '''
-    df['is_Cool'] = df['Coolness'].apply(lambda x: 1 if x > coolness_factor else 0)
-    return df
+    features_df['is_Cool'] = features_df['Coolness'].apply(lambda x: 1 if x > coolness_factor else 0)
+    return features_df
 
 def process_csv(data_source_filepath, coolness_factor):
+    '''
+    Read CSV data, create features, and generate the target variable.
+
+    Args:
+        data_source_filepath (str): Filepath to the CSV data source.
+        coolness_factor (float): Threshold value to determine if a value is considered 'Cool'.
+
+    Returns:
+        DataFrame: Processed DataFrame with features and target variable.
+
+    '''
     # Read the CSV file into a pandas DataFrame
-    df = pd.read_csv(data_source_filepath)
+    source_df = pd.read_csv(data_source_filepath)
 
     # Add features
-    df = create_features(df)
+    features_df = create_features(source_df)
 
     # Add Classifier Categories
-    df = create_target(df, coolness_factor)
+    full_df = create_target(features_df, coolness_factor)
 
-    return df
+    return full_df
 
 def save_train_test_split(df, test_size, random_state, output_path):
+    '''
+    Split data into train and test sets, save them as CSV files, and return the filepaths.
+
+    Args:
+        df (DataFrame): Input DataFrame to be split into train and test sets.
+        test_size (float): Proportion of the dataset to include in the test set.
+        random_state (int): Seed for the random number generator.
+        output_path (str): Directory path to save the train and test data.
+
+    Returns:
+        str: Filepath of the saved train data.
+        str: Filepath of the saved test data.
+    '''
 
     # Split the data into train and test sets
     train, test = train_test_split(df, test_size=test_size, random_state=random_state)
