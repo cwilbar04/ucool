@@ -1,0 +1,11 @@
+data_generator:
+  rows: 10000
+  output_filepath: ./data_generator/demo.csv
+
+data:
+  coolness_factor: 75
+  features: ['Length of First Name', 'Distance']
+  test_size: 0.2
+  random_state: 42
+  output_path: ./data
+
