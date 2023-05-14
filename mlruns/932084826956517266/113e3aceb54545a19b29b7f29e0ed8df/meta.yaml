@@ -1,0 +1,15 @@
+artifact_uri: file:///Users/u429930/Repositories/ucool/mlruns/932084826956517266/113e3aceb54545a19b29b7f29e0ed8df/artifacts
+end_time: 1683909130372
+entry_point_name: ''
+experiment_id: '932084826956517266'
+lifecycle_stage: active
+run_id: 113e3aceb54545a19b29b7f29e0ed8df
+run_name: burly-gull-915
+run_uuid: 113e3aceb54545a19b29b7f29e0ed8df
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1683909113744
+status: 3
+tags: []
+user_id: u429930

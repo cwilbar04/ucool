@@ -1,0 +1,19 @@
+artifact_path: coolness_model
+flavors:
+  python_function:
+    env:
+      conda: conda.yaml
+      virtualenv: python_env.yaml
+    loader_module: mlflow.sklearn
+    model_path: model.pkl
+    predict_fn: predict
+    python_version: 3.10.9
+  sklearn:
+    code: null
+    pickled_model: model.pkl
+    serialization_format: cloudpickle
+    sklearn_version: 1.2.2
+mlflow_version: 2.3.1
+model_uuid: bbdadbfd843640d9b0b30ef09dfb042c
+run_id: 113e3aceb54545a19b29b7f29e0ed8df
+utc_time_created: '2023-05-12 16:31:54.174181'
