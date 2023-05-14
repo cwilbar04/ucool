@@ -2,4 +2,5 @@ Flask==2.3.2
 mlflow==2.3.2
 names==0.3.0
 pandas==2.0.1
+PyYAML==6.0
 scikit_learn==1.2.2
