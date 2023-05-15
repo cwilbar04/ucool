@@ -35,14 +35,10 @@ def generate_csv(num_rows, output_filepath):
 
 if __name__ == '__main__':
     import argparse
-    from helpers import read_params
 
     args = argparse.ArgumentParser()
-    args.add_argument("--config", default="params.yml")
+    args.add_argument("--num_rows")
+    args.add_argument("--output_filepath")
     parsed_args = args.parse_args()
 
-    config = read_params(parsed_args.config)
-    num_rows = config['data_generator']['rows']
-    output_filepath = config['data_generator']['output_filepath']
-
-    generate_csv(num_rows, output_filepath)
+    generate_csv(int(parsed_args.num_rows), parsed_args.output_filepath)
