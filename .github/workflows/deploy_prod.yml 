@@ -1,8 +1,8 @@
-name: CI
+name: CD
 
 on:
   push:
-    branches-ignore:
+    branches:
       - main
 
 jobs:
@@ -28,3 +28,6 @@ jobs:
 
       - name: Run pytest
         run: make code_test
+
+      - name: Deploy designated mlflow model to production
+        run: python ./src/model/deploy.py --run_type=PROD
