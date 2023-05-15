@@ -1,2 +1,5 @@
+-r requirements.txt
 jupyter
 ipykernel
+pylint
+pytest
