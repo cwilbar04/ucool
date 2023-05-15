@@ -15,7 +15,7 @@ def create_features(source_df):
     IMPORTANT: Make sure to add feature to the model.features in params.yml if desired to be used in the model.
     '''
     # Calculate the length of the first name and add a column
-    source_df['Length of First Name'] = source_df['First Name'].apply(lambda x: len(x))
+    source_df['Length of First Name'] = source_df['First Name'].apply(len)
 
     # Calculate the distance between the first letters of the first and second columns and add a column
     source_df['Distance'] = source_df.apply(lambda row: abs(ord(row['First Name'][0]) - ord(row['Last Name Initial'])), axis=1)
@@ -102,10 +102,6 @@ if __name__ == '__main__':
     parsed_args = args.parse_args()
 
     config = read_params(parsed_args.config)
-    coolnes_factor = config['data']['coolness_factor']
-    
-    # Use demo filepath for testing from command line
-    data_source_filepath = config['data_generator']['output_filepath']    
 
-    dataframe = process_csv(data_source_filepath, coolnes_factor)
+    dataframe = process_csv(config['data_generator']['output_filepath'], config['data']['coolness_factor'])
     print(dataframe)
