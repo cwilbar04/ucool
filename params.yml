@@ -18,3 +18,4 @@ model:
     remote_server_uri: http://localhost:1234
     production_config:
       register_model_name: is_you_cool_classifier
+      production_version: 2
