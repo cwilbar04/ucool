@@ -28,4 +28,6 @@ jobs:
           pip install -r requirements-dev.txt
 
       - name: Deploy designated mlflow model to production
-        run: python ./src/model/deploy.py --run_type=PROD
+        run: |
+          export PYTHONPATH="$PWD/src"
+          python ./src/model/deploy.py --run_type=PROD
