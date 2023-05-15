@@ -21,3 +21,9 @@ lint:
 
 generate_demo_data:
 	python ./data_generator/generate_data.py --num_rows=10000 --output_filepath=./data_generator/demo.csv
+
+test_webapp:
+	python ./src/webapp/webapp.py
+
+prod_webapp:
+	RUN_TYPE=PROD python ./src/webapp/webapp.py
