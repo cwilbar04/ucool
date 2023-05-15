@@ -1,13 +1,6 @@
-name: Continuous Deployment
+name: CI/CD
 
-on:
-  workflow_run:
-    workflows: ["Continuous Integration Testing"]
-    types:
-      - completed
-  push:
-    branches:
-      - main
+on: [push]
 
 jobs:
   build:
@@ -27,6 +20,21 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements-dev.txt
 
+  test:
+    steps:
+      - name: Run pylint
+        run: make lint
+        continue-on-error: true
+
+      - name: Run pytest
+        run: |
+          export PYTHONPATH="$PWD/src"
+          make code_test
+
+  deploy:
+    needs: test
+    if: ${{ github.ref == 'refs/heads/main' }}
+    steps:
       - name: Launch mlflow
         run: mlflow server --backend-store-uri sqlite:///mlflow.db --default-artifact-root ./artifacts --host 0.0.0.0 -p 1234 &
 
