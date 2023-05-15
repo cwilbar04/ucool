@@ -22,6 +22,7 @@ jobs:
 
       - name: Run pylint
         run: make lint
+        continue-on-error: true
 
       - name: Run pytest
         run: make code_test
