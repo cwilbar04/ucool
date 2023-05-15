@@ -26,5 +26,5 @@ jobs:
 
       - name: Run pytest
         run: |
-        export PYTHONPATH="$PWD/src"
-        make code_test
+          export PYTHONPATH="$PWD/src"
+          make code_test
