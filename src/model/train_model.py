@@ -1,6 +1,7 @@
 import pandas as pd
 import mlflow
 import mlflow.sklearn
+from mlflow.models.signature import infer_signature
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import f1_score,recall_score,accuracy_score,precision_score,confusion_matrix,classification_report
 
@@ -80,9 +81,6 @@ def main(config):
         # Train the model
         model = train_model(model_config, train_x,train_y)
 
-        # Track the model artifacts
-        mlflow.sklearn.log_model(model, "coolness_model")
-
         # Evaluate the model
         test_predictions = model.predict(test_x)
         accuracy,precision,recall,f1score = evaluate_model(
@@ -92,6 +90,10 @@ def main(config):
         mlflow.log_metric("precision", precision)
         mlflow.log_metric("recall", recall)
         mlflow.log_metric("f1_score", f1score)
+
+        # Track the model artifacts
+        signature = infer_signature(train_x, test_predictions)
+        mlflow.sklearn.log_model(model, artifact_path="artifacts", signature=signature)
 
     return train_x,train_y,test_x,test_y, model
 

@@ -11,14 +11,14 @@ data:
 model:
   features: ['Length of First Name', 'Distance']
   target: 'is_Cool'
-  train_data_path: ./data/train_2023-05-14T16:08:37.csv
-  test_data_path: ./data/test_2023-05-14T16:08:37.csv
+  train_data_path: ./data/train_2023-05-14T16:53:45.csv
+  test_data_path: ./data/test_2023-05-14T16:53:45.csv
   max_depth:
   n_estimators: 100
   avg_method: weighted
   mlflow_config:
     artifacts_dir: artifacts
     experiment_name: is_you_cool_classifier
-    run_name: random_forest
-    registered_model_name: is_you_cool_random_forest_model
     remote_server_uri: http://localhost:1234
+    production_config:
+      register_model_name: is_you_cool_classifier
