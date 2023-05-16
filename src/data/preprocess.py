@@ -21,7 +21,7 @@ def create_features(source_df):
     source_df['Distance'] = source_df.apply(lambda row: abs(ord(row['First Name'][0]) - ord(row['Last Name Initial'])), axis=1)
 
     # Calculate the distance between the first letters of the first name and last letter of first name
-    source_df['Distance'] = source_df.apply(lambda row: abs(ord(row['First Name'][0]) - ord(row['First Name'][-2]), axis=1)
+    source_df['Distance'] = source_df.apply(lambda row: abs(ord(row['First Name'][0]) - ord(row['First Name'][-2])), axis=1)
 
     return source_df
 
